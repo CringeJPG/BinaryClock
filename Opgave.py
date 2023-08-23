@@ -3,10 +3,21 @@ import time, datetime
 
 hat = SenseHat()
 
+def tweHourClock():
+    global timeC
+    timeC = 12
+
+def twe4HourClock():
+    global timeC
+    timeC = 0
+
 hour_color = (255, 255, 0)
 minute_color = (0, 0, 255)
 second_color = (255, 0, 0)
 off = (0, 0, 0)
+
+horiBool = True
+vertBool = False
 
 hat.clear()
 # hat.show_message("Programmet starter")
@@ -28,7 +39,7 @@ def display_binary_vertical(value, column, color):
             hat.set_pixel(column, x, off)
 
 def horiClock():
-    while True:
+    while horiBool:
         t = datetime.datetime.now()
         x = t.hour
         if x > 12:
@@ -40,7 +51,7 @@ def horiClock():
         time.sleep(0.0001)
 
 def vertClock():
-    while True:
+    while vertBool:
         t = datetime.datetime.now()
         x = t.hour
         if x > 12:
@@ -68,13 +79,32 @@ def vertClock():
 
         time.sleep(0.0001)
 
-def tweHourClock():
-    global timeC
-    timeC = 12
+def UnD():
+    global horiBool, vertBool
+    horiBool = False
+    vertBool = True
+    hat.clear()
+    vertClock()
 
-def twe4HourClock():
-    global timeC
-    timeC = 0
+def LnR():
+    global horiBool, vertBool
+    vertBool = False
+    horiBool = True
+    hat.clear()
+    horiClock()
 
-tweHourClock()
-vertClock()
+def pre():
+    if timeC == 12:
+        twe4HourClock()
+    else:
+        tweHourClock()
+    
+
+hat.stick.direction_up = UnD
+hat.stick.direction_down = UnD
+hat.stick.direction_left = LnR
+hat.stick.direction_right = LnR
+hat.stick.direction_middle = pre
+
+twe4HourClock()
+horiClock()
